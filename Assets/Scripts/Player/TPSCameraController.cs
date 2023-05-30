@@ -13,10 +13,9 @@ public class TPSCameraController : MonoBehaviour
     private float xRotation;
     private float yRotation;
     private bool OnLookArounded;
-    private Quaternion originalRotation; // 추가: 원래의 회전값을 저장할 변수
+    private Quaternion originalRotation;
 
     Vector3 lookPoint;
-    Vector3 prevLookDir;
 
     private void OnEnable()
     {
