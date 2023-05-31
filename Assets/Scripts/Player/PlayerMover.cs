@@ -66,6 +66,7 @@ public class PlayerMover : MonoBehaviour
         else
             lastSpeed = Mathf.Lerp(lastSpeed, runSpeed, 0.5f);
 
+
         controller.Move(transform.forward * moveDir.z * lastSpeed * Time.deltaTime);
         controller.Move(transform.right * moveDir.x * lastSpeed * Time.deltaTime);
 
@@ -107,5 +108,20 @@ public class PlayerMover : MonoBehaviour
             lastSpeed = walkSpeed;
             isWalking = true;
         }
+    }
+    
+    RaycastHit hit;
+    private bool isSlope()
+    {
+
+
+        if(Physics.Raycast(transform.position + Vector3.up * 1f, Vector3.down, out hit, 2f, LayerMask.GetMask("Enviroment")))
+        {
+            float angles = Vector3.Angle(hit.normal, Vector3.up);
+
+            return angles != 0;
+        }
+
+        return false;
     }
 }
