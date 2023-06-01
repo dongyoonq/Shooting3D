@@ -10,6 +10,8 @@ public class FootIK : MonoBehaviour
     [Range(0, 1f)]
     public float distanceGround;
 
+    private bool isGround;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -17,7 +19,7 @@ public class FootIK : MonoBehaviour
 
     private void OnAnimatorIK(int layerIndex)
     {
-        if (animator)
+        if (animator && isSlope() && isGround)
         {
             animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 1);
             animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 1);
@@ -47,8 +49,30 @@ public class FootIK : MonoBehaviour
                 animator.SetIKPosition(AvatarIKGoal.RightFoot, footPosition);
                 animator.SetIKRotation(AvatarIKGoal.RightFoot, Quaternion.LookRotation(transform.forward, hit.normal));
             }
-
-
         }
+    }
+
+    private bool isSlope()
+    {
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position + Vector3.up * 1f, Vector3.down, out hit, 2f, LayerMask.GetMask("Enviroment")))
+        {
+            float angles = Vector3.Angle(hit.normal, Vector3.up);
+
+            return angles != 0;
+        }
+
+        return false;
+    }
+
+    private void FixedUpdate()
+    {
+        RaycastHit hit;
+
+        if (Physics.SphereCast(transform.position + Vector3.up * 1f, 0.5f, Vector3.down, out hit, 0.5001f, LayerMask.GetMask("Enviroment")))
+            isGround = true;
+        else
+            isGround = false;
     }
 }

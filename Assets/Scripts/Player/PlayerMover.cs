@@ -113,8 +113,6 @@ public class PlayerMover : MonoBehaviour
     RaycastHit hit;
     private bool isSlope()
     {
-
-
         if(Physics.Raycast(transform.position + Vector3.up * 1f, Vector3.down, out hit, 2f, LayerMask.GetMask("Enviroment")))
         {
             float angles = Vector3.Angle(hit.normal, Vector3.up);

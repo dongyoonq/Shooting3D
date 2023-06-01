@@ -17,6 +17,7 @@ public class Shooter : MonoBehaviour
     [SerializeField] UnityEvent OnFired;
 
     [SerializeField] Transform rightHandHold;
+    [SerializeField] WeaponHolder weaponHolder;
 
     private void Awake()
     {
@@ -33,7 +34,13 @@ public class Shooter : MonoBehaviour
         if (isReloading)
             return;
 
+        Fire();
         StartCoroutine(FireRiggingRoutine());
+    }
+
+    private void Fire()
+    {
+        weaponHolder.Fire();
     }
 
     IEnumerator ReloadRoutine()
