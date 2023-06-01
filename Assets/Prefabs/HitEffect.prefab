@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3371853170800905851}
   - component: {fileID: 3178353677659659601}
   - component: {fileID: 3179337557107628857}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Decal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4903,7 +4903,7 @@ GameObject:
   - component: {fileID: 3177824578359938197}
   - component: {fileID: 3179516388988381707}
   - component: {fileID: -6069462843632000407}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HitEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9796,7 +9796,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3377326874308785439}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd9ccbfc727c20143b71616f9b33d85f, type: 3}
+  m_Script: {fileID: 11500000, guid: eb81fff490e98a44982ec9600fd51ae8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   releaseTime: 0.1
@@ -9811,7 +9811,7 @@ GameObject:
   - component: {fileID: 3371818093524264039}
   - component: {fileID: 3177870807980377325}
   - component: {fileID: 3179283381868882275}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Dust
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14486,7 +14486,7 @@ GameObject:
   - component: {fileID: 3371722056565645403}
   - component: {fileID: 3178313690328971023}
   - component: {fileID: 3177525277997782609}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}

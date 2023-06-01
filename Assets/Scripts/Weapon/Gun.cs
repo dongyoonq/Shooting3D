@@ -8,39 +8,47 @@ public class Gun : MonoBehaviour
     [SerializeField] TrailRenderer bulletTrail;
     [SerializeField] ParticleSystem muzzleEffect;
     [SerializeField] ParticleSystem hitEffect;
-    protected float bulletSpeed;
-    protected float maxDistance;
-    protected float damage;
-    public int magazine;
+    public float bulletSpeed;
+    public float maxDistance;
+    public float damage;
+    private int magazine;
     public int Maxmagazine;
+
     private ObjectPool EffectPool;
     private ObjectPool TrailPool;
 
     private void Awake()
     {
-        EffectPool = GameObject.FindGameObjectWithTag("ParticlePool").GetComponent<ObjectPool>();
+        magazine = Maxmagazine;
+        EffectPool = GameObject.Find("HitParticlePooler").GetComponent<ObjectPool>();
+        TrailPool = GameObject.Find("TrailParticlePooler").GetComponent<ObjectPool>();
     }
 
     public virtual void Fire()
     {
-        muzzleEffect.Play();
-
-        RaycastHit hit;
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, maxDistance))
+        if (magazine > 0)
         {
-            IHittable hittable = hit.transform.GetComponent<IHittable>();
-            Poolable particle = EffectPool.Get();
-            particle.transform.position = hit.point;
-            particle.transform.rotation = Quaternion.LookRotation(hit.normal);
-            particle.transform.parent = hit.transform;
+            muzzleEffect.Play();
 
-            StartCoroutine(trailRoutine(muzzleEffect.transform.position, hit.point));
+            RaycastHit hit;
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, maxDistance))
+            {
+                IHittable hittable = hit.transform.GetComponent<IHittable>();
+                Poolable particle = EffectPool.Get();
+                particle.transform.position = hit.point;
+                particle.transform.rotation = Quaternion.LookRotation(hit.normal);
+                particle.transform.parent = hit.transform;
 
-            hittable?.Hit(hit, damage);
-        }
-        else
-        {
-            StartCoroutine(trailRoutine(muzzleEffect.transform.position, Camera.main.transform.forward * maxDistance));
+                StartCoroutine(trailRoutine(muzzleEffect.transform.position, hit.point));
+
+                hittable?.Hit(hit, damage);
+            }
+            else
+            {
+                StartCoroutine(trailRoutine(muzzleEffect.transform.position, Camera.main.transform.forward * maxDistance));
+            }
+
+            magazine -= 1;
         }
     }
 
@@ -66,7 +74,5 @@ public class Gun : MonoBehaviour
 
             yield return null;
         }
-
-        Destroy(trail); 
     }
 }

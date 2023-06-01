@@ -7,16 +7,26 @@ public class TPSCameraController : MonoBehaviour
 {
     [SerializeField] Transform cameraRoot;
     [SerializeField] Transform aimTarget;
+    [SerializeField] LayerMask layer;
     [SerializeField] float mouseSensitivity;
     [SerializeField] float lookDistance;
+    [SerializeField] int zoomMagnification;
 
     private Vector2 lookDelta;
     private float xRotation;
     private float yRotation;
     private bool OnLookArounded;
+    private bool isZooming;
     private Quaternion originalRotation;
 
+    private Vector3 initRootPos;
+
     Vector3 lookPoint;
+
+    private void Start()
+    {
+        initRootPos = cameraRoot.localPosition;
+    }
 
     private void OnEnable()
     {
@@ -83,5 +93,36 @@ public class TPSCameraController : MonoBehaviour
             lookPoint.y = transform.position.y;
             transform.LookAt(lookPoint);
         }
+    }
+
+    private void OnZoom(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            Zoom();
+        }
+        else
+        {
+            isZooming = false;
+            cameraRoot.localPosition = initRootPos;
+        }
+    }
+
+    private void Zoom()
+    {
+        if (!isZooming)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(cameraRoot.position, cameraRoot.forward, out hit, zoomMagnification, layer))
+            {
+                cameraRoot.position = hit.point + (hit.normal * 0.5f);
+            }
+            else
+            {
+                cameraRoot.position += cameraRoot.forward * zoomMagnification;
+                //cameraRoot.localPosition = initRootPos + (Vector3.forward * zoomMagnification);
+            }
+        }
+        isZooming = true;
     }
 }

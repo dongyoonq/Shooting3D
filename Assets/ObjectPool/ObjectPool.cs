@@ -49,7 +49,7 @@ public class ObjectPool : MonoBehaviour
         if (objectPool.Count < maxSize)
         {
             poolable.gameObject.SetActive(false);
-            poolable.transform.SetParent(transform);
+            poolable.transform.parent = transform;
             objectPool.Push(poolable);
         }
         else
