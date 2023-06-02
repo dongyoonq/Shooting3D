@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using UnityEngine.Events;
@@ -21,6 +22,10 @@ public class Shooter : MonoBehaviour
 
     private void Awake()
     {
+        reloadTime = 3.1f;
+        aimRig = GameObject.Find("AimRig").GetComponent<Rig>();
+        rightHandHold = GameObject.Find("RightHand").GetComponent<Transform>();
+        weaponHolder = GameObject.Find("WeaponHolder").GetComponent<WeaponHolder>();
         animator = GetComponent<Animator>();
     }
 

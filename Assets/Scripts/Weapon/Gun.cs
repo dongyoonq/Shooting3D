@@ -2,26 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-
 public class Gun : MonoBehaviour
 {
-    [SerializeField] TrailRenderer bulletTrail;
     [SerializeField] ParticleSystem muzzleEffect;
     [SerializeField] ParticleSystem hitEffect;
+    [SerializeField] TrailRenderer bulletTrail;
     public float bulletSpeed;
     public float maxDistance;
     public float damage;
     private int magazine;
     public int Maxmagazine;
 
-    private ObjectPool EffectPool;
-    private ObjectPool TrailPool;
-
     private void Awake()
     {
+        Maxmagazine = 20;
+        damage = 5;
+        bulletSpeed = 2000;
+        maxDistance = 200;
         magazine = Maxmagazine;
-        EffectPool = GameObject.Find("HitParticlePooler").GetComponent<ObjectPool>();
-        TrailPool = GameObject.Find("TrailParticlePooler").GetComponent<ObjectPool>();
+        muzzleEffect = GameObject.Find("MuzzleFlash").GetComponent<ParticleSystem>();
     }
 
     public virtual void Fire()
@@ -34,10 +33,9 @@ public class Gun : MonoBehaviour
             if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, maxDistance))
             {
                 IHittable hittable = hit.transform.GetComponent<IHittable>();
-                Poolable particle = EffectPool.Get();
-                particle.transform.position = hit.point;
-                particle.transform.rotation = Quaternion.LookRotation(hit.normal);
-                particle.transform.parent = hit.transform;
+
+                ParticleSystem effect = GameManager.Resouce.Instantiate("prefabs/HitEffect", hitEffect, hit.point, Quaternion.LookRotation(hit.normal), hit.transform, true);
+                GameManager.Resouce.Destroy(effect, 3f);
 
                 StartCoroutine(trailRoutine(muzzleEffect.transform.position, hit.point));
 
@@ -59,9 +57,8 @@ public class Gun : MonoBehaviour
 
     IEnumerator trailRoutine(Vector3 start, Vector3 end)
     {
-        Poolable trail = TrailPool.Get();
-        trail.transform.position = start;
-        trail.transform.rotation = Quaternion.identity;
+        TrailRenderer trail = GameManager.Resouce.Instantiate("prefabs/BulletTrail", bulletTrail, start, Quaternion.identity, true);
+        trail.Clear();
         
         float totalTime = Vector2.Distance(start, end) / bulletSpeed;
 
@@ -74,5 +71,7 @@ public class Gun : MonoBehaviour
 
             yield return null;
         }
+
+        GameManager.Resouce.Destroy(trail.gameObject, 10f);
     }
 }
